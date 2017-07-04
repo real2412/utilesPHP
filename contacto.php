@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     
-    <title>Rio Rapido</title>
+    <title>Titulo</title>
 
     <!-- Bootstrap core CSS y JS -->
     <?php include "php/head.php"; ?>
@@ -51,27 +51,28 @@
 	  
 	  
 	  	  
+ 	  
 <div class="row">
 	<div class="col-md-6">
 		<div class="jumbotron" style="margin-top:10px;">
 			<h3>Escríbanos con confianza</h3>
-			<form class="form-horizontal">
+			<form class="form-horizontal" method="post">
 			  <div class="form-group">
 				<label class="col-sm-2 control-label">Nombre</label>
 				<div class="col-sm-10">
-				  <input type="text" class="form-control" id="inputPassword3" placeholder="">
+				  <input type="text" class="form-control" name="nombre" placeholder="">
 				</div>
 			  </div>
 			  <div class="form-group">
 				<label class="col-sm-2 control-label">Correo</label>
 				<div class="col-sm-10">
-				  <input type="email" class="form-control" id="inputEmail3" placeholder="ejemplo@hotmail.com">
+				  <input type="email" class="form-control" name="email" placeholder="ejemplo@hotmail.com">
 				</div>
 			  </div>
 			  <div class="form-group">
 				<label class="col-sm-2 control-label">Consulta</label>
 				<div class="col-sm-10">
-				  <textarea  class="form-control" id="inputPassword3" placeholder=""></textarea>
+				  <textarea  class="form-control" name="cuerpo" placeholder=""></textarea>
 				</div>
 			  </div>
 			  
@@ -86,7 +87,33 @@
 	  
     </div><!-- /.container -->
   </div>
-	  
+  <?php
+	if(isset($_POST["nombre"]) && isset($_POST["email"]) && isset($_POST["cuerpo"])){
+		$nombre=$_POST["nombre"];
+		$mail = $_POST["email"];
+		$cuerpo="nombre: ".$nombre."\r \n email:".$mail."\r \n mensaje: ".$_POST["cuerpo"];
+		
+		//Titulo
+		$titulo = "CONSULTA";
+		//cabecera
+		$headers = "MIME-Version: 1.0\r\n"; 
+		$headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
+		//dirección del remitente 
+		$headers .= "From: ".$nombre." < desdelaweb@tudominio.com >\r\n";
+		//Enviamos el mensaje a tu_dirección_email 
+		$bool = mail("contacto@tudominio.com",$titulo,$cuerpo,$headers);
+		if($bool){
+			echo "<div class='alert alert-success' role='alert'>
+        <strong>Mensaje enviado!</strong> Resolveremos su consulta a la brevedad.
+      </div>";
+		}else{
+			echo "<div class='alert alert-danger' role='alert'>
+        <strong>Mensaje no enviado!</strong> Verifique la informacion ingresada.
+      </div>";
+		}		
+	
+	}
+  ?>	  
 	<?php include "php/footer.php"; ?>
 	
 	
@@ -98,128 +125,6 @@
 	
 	
 
-	<script>
-	if (top.location != location) {
-    top.location.href = document.location.href ;
-  }
-		$(function(){
-			window.prettyPrint && prettyPrint();
-			$('#dp1').datepicker({
-				format: 'mm-dd-yyyy'
-			});
-			$('#dp2').datepicker();
-			$('#dp3').datepicker();
-			$('#dp3').datepicker();
-			$('#dpYears').datepicker();
-			$('#dpMonths').datepicker();
-			
-			
-			var startDate = new Date(2012,1,20);
-			var endDate = new Date(2012,1,25);
-			$('#dp4').datepicker()
-				.on('changeDate', function(ev){
-					if (ev.date.valueOf() > endDate.valueOf()){
-						$('#alert').show().find('strong').text('The start date can not be greater then the end date');
-					} else {
-						$('#alert').hide();
-						startDate = new Date(ev.date);
-						$('#startDate').text($('#dp4').data('date'));
-					}
-					$('#dp4').datepicker('hide');
-				});
-			$('#dp5').datepicker()
-				.on('changeDate', function(ev){
-					if (ev.date.valueOf() < startDate.valueOf()){
-						$('#alert').show().find('strong').text('The end date can not be less then the start date');
-					} else {
-						$('#alert').hide();
-						endDate = new Date(ev.date);
-						$('#endDate').text($('#dp5').data('date'));
-					}
-					$('#dp5').datepicker('hide');
-				});
-
-        // disabling dates
-        var nowTemp = new Date();
-        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-
-        var checkin = $('#dpd1').datepicker({
-          onRender: function(date) {
-            return date.valueOf() < now.valueOf() ? 'disabled' : '';
-          }
-        }).on('changeDate', function(ev) {
-          if (ev.date.valueOf() > checkout.date.valueOf()) {
-            var newDate = new Date(ev.date)
-            newDate.setDate(newDate.getDate() + 1);
-            checkout.setValue(newDate);
-          }
-          checkin.hide();
-          $('#dpd2')[0].focus();
-        }).data('datepicker');
-        var checkout = $('#dpd2').datepicker({
-          onRender: function(date) {
-            return date.valueOf() <= checkin.date.valueOf() ? 'disabled' : '';
-          }
-        }).on('changeDate', function(ev) {
-          checkout.hide();
-        }).data('datepicker');
-		});
-	</script>
-	<script src="Datepicker%20for%20Bootstrap,%20from%20Twitter_files/urchin.js" type="text/javascript">
-</script>
-
-<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-	
-	<script>
-
-		var mymap = L.map('mapid').setView([-3.7027, -73.2175], 6);
-
-		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
-			maxZoom: 18,
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-			id: 'mapbox.streets'
-		}).addTo(mymap);
-
-
-		L.marker([-3.7040, -73.2485]).addTo(mymap)
-			.bindPopup("<b>Puerto de Nanay</b><br />Descripcion").openPopup();
-
-		L.marker([-5.900772, -76.112905]).addTo(mymap)
-			.bindPopup("<b>Puerto de Yurimaguas</b><br />Descripcion").openPopup();
-		
-		L.marker([-8.392862, -74.582617]).addTo(mymap)
-			.bindPopup("<b>Puerto de Pucallpa</b><br />Descripcion").openPopup();
-			
-		L.marker([-3.910789, -70.516081]).addTo(mymap)
-			.bindPopup("<b>Puerto de Caballococha</b><br />Descripcion").openPopup();
-		
-		L.circle([51.508, -0.11], 500, {
-			color: 'red',
-			fillColor: '#f03',
-			fillOpacity: 0.5
-		}).addTo(mymap).bindPopup("I am a circle.");
-
-		L.polygon([
-			[51.509, -0.08],
-			[51.503, -0.06],
-			[51.51, -0.047]
-		]).addTo(mymap).bindPopup("I am a polygon.");
-
-
-		var popup = L.popup();
-
-		function onMapClick(e) {
-			popup
-				.setLatLng(e.latlng)
-				.setContent("You clicked the map at " + e.latlng.toString())
-				.openOn(mymap);
-		}
-
-		mymap.on('click', onMapClick);
-
-	</script>
 	
 </body></html>
 
